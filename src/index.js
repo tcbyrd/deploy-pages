@@ -3,10 +3,10 @@
 // without the user having to do the tar process themselves.
 
 const core = require('@actions/core')
-const github = require('@actions/github')
 
 const { Deployment } = require('./internal/deployment')
 const getContext = require('./internal/context')
+const fs = require('fs')
 
 const deployment = new Deployment()
 
@@ -27,7 +27,15 @@ async function main() {
     return
   }
 
-  const { before, after } = github.context.payload
+  // Not sure why github.context isn't working.
+  // just get the webhook payload from the filesystem
+  const eventPath = process.env.GITHUB_EVENT_PATH
+  const eventData = fs.readFileSync(eventPath, 'utf8')
+
+  // Parse the JSON data
+  const eventJson = JSON.parse(eventData)
+
+  const { before, after } = eventJson
 
   if (before >= 0 || after < 1) {
     core.info(`This commit is the same or before the one that triggered it. May not want to deploy?`)
