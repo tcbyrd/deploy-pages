@@ -36,7 +36,7 @@ async function main() {
   core.info('::group::comparison')
   core.info(`before: ${before}`)
   core.info(`after: ${after}`)
-  core.info(`payload: ${github.context.payload}`)
+  core.info(`payload: ${JSON.stringify(github.context.payload)}`)
   if (before >= 0 || after < 1) {
     core.info(`This commit is the same or before the one that triggered it. May not want to deploy?`)
   } else {
