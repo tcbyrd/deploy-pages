@@ -37,11 +37,15 @@ async function main() {
 
   const { before, after } = eventJson
 
+  core.info('::group::comparison')
+  core.info(`before: ${before}`)
+  core.info(`after: ${after}`)
   if (before >= 0 || after < 1) {
     core.info(`This commit is the same or before the one that triggered it. May not want to deploy?`)
   } else {
-    core.info(`This commit is after the one that triggere dit. Deploy should be ok...`)
+    core.info(`This commit is after the one that triggered it. Deploy should be ok...`)
   }
+  core.info('::endgroup::')
 
   try {
     const deploymentInfo = await deployment.create(idToken)
