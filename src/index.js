@@ -27,11 +27,9 @@ async function main() {
     return
   }
 
-  if github.context.eventName == 'push' {
-    const { before, after } = github.context.payload
-  }
+  const { before, after } = github.context.payload
 
-  if before >=0 || after < 1 {
+  if (before >= 0 || after < 1) {
     core.info(`This commit is the same or before the one that triggered it. May not want to deploy?`)
   } else {
     core.info(`This commit is after the one that triggere dit. Deploy should be ok...`)
