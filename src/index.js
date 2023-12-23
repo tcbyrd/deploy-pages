@@ -3,6 +3,7 @@
 // without the user having to do the tar process themselves.
 
 const core = require('@actions/core')
+const github = require('@actions/github')
 
 const { Deployment } = require('./internal/deployment')
 const getContext = require('./internal/context')
@@ -24,6 +25,16 @@ async function main() {
     console.log(error)
     core.setFailed(`Ensure GITHUB_TOKEN has permission "id-token: write".`)
     return
+  }
+
+  if github.context.eventName == 'push' {
+    const { before, after } = github.context.payload
+  }
+
+  if before >=0 || after < 1 {
+    core.info(`This commit is the same or before the one that triggered it. May not want to deploy?`)
+  } else {
+    core.info(`This commit is after the one that triggere dit. Deploy should be ok...`)
   }
 
   try {
